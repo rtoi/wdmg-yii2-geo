@@ -18,13 +18,11 @@ use wdmg\helpers\ArrayHelper;
 use Yii;
 use wdmg\base\BaseModule;
 
-
 /**
  * GEO module definition class
  */
 class Module extends BaseModule
 {
-
     /**
      * {@inheritdoc}
      */
@@ -67,7 +65,6 @@ class Module extends BaseModule
 
         // Set priority of current module
         $this->setPriority($this->priority);
-
     }
 
     /**
@@ -75,9 +72,9 @@ class Module extends BaseModule
      */
     public function dashboardNavItems($options = null)
     {
-        $tems = [
+        $items = [
             'label' => $this->name,
-            'url' => [$this->routePrefix . '/'. $this->id],
+            'url' => [$this->routePrefix . '/' . $this->id],
             'icon' => 'fa fa-fw fa-globe-americas',
             'active' => in_array(\Yii::$app->controller->module->id, [$this->id]),
             'items' => [
@@ -104,25 +101,25 @@ class Module extends BaseModule
             ]
         ];
 
-	    if (!is_null($options)) {
+        if (!is_null($options)) {
+            if (isset($options['count'])) {
+                $items['label'] .= '<span class="badge badge-default float-right">' . $options['count'] . '</span>';
+                unset($options['count']);
+            }
 
-		    if (isset($options['count'])) {
-			    $items['label'] .= '<span class="badge badge-default float-right">' . $options['count'] . '</span>';
-			    unset($options['count']);
-		    }
+            if (is_array($options)) {
+                $items = ArrayHelper::merge($items, $options);
+            }
+        }
 
-		    if (is_array($options))
-			    $items = ArrayHelper::merge($items, $options);
-
-	    }
-
-	    return $items;
+        return $items;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function bootstrap($app) {
+    public function bootstrap($app)
+    {
         parent::bootstrap($app);
     }
 }
